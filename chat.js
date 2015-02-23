@@ -2,7 +2,8 @@ window.onload = function(){
     var socket = io.connect();
     var field = document.getElementById('field') ;
     var form = document.getElementById('form') ;
-    var content = document.getElementById('content') ;
+    var chatWindow = document.getElementById('chat-window') ;
+    var users = document.getElementById('users') ;
     var name = prompt('Ваше имя?');
 
     socket.emit('hello', {'name': name});
@@ -22,10 +23,13 @@ window.onload = function(){
             for(var i=0; i<messages.length; i++){
                 html+= messages[i] + '<br>';
             }
-            content.innerHTML = html;
+            chatWindow.innerHTML = html;
         }else{
             console.log('Something wrong');
         }
     });
 
+    //socket.on('showUsers', function(data){
+    //    socket.emit('renderUsers', data);
+    //});
 };

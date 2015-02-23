@@ -1,21 +1,29 @@
 var express = require('express');
 var app = express();
 var io = require('socket.io').listen(app.listen(8080));
+var users = [];
+var someData = users;
+
+
+app.use("/css", express.static(__dirname + '/css'));
+app.use("/", express.static(__dirname));
+
 app.set('views', __dirname);
 app.set('view engine', 'ejs');
 app.get('/', function(req,res){
-    res.render('tpl/page');
+    var xxx = JSON.stringify(someData);
+    console.log(xxx);
+    res.render('tpl/page', xxx);
 });
 
-var users = {};
-function getUsers(obj){
+
+var userList = function(obj){
     var tmp = [];
     for (var i in obj){
         tmp.push(obj[i]);
     }
     return tmp.join(', ');
 }
-
 
 io.on('connection', function(client){
     client.emit('message', {'message': 'Welcome to chat!'});
@@ -30,8 +38,7 @@ io.on('connection', function(client){
 
 
         if(Object.keys(users).length > 0){
-            var userList = getUsers(users);
-            client.emit('message', {message: 'Уже в чате: ' + userList + ' ----'});
+            client.emit('message', {message: 'Уже в чате: ' + userList(users) + ' ----'});
         }else{
             client.emit('message', {message: 'Кроме Вас никого нет'});
         }
