@@ -1,7 +1,6 @@
 var express = require('express');
 var app = express();
-var io = require('socket.io').listen(app.listen(80));
-
+var io = require('socket.io').listen(app.listen(8080));
 app.set('views', __dirname);
 app.set('view engine', 'ejs');
 app.get('/', function(req,res){

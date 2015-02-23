@@ -1,5 +1,5 @@
 window.onload = function(){
-    var socket = io.connect('http://localhost:8080');
+    var socket = io.connect();
     var field = document.getElementById('field') ;
     var form = document.getElementById('form') ;
     var content = document.getElementById('content') ;
@@ -27,4 +27,5 @@ window.onload = function(){
             console.log('Something wrong');
         }
     });
+
 };
