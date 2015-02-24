@@ -1,14 +1,14 @@
+var socket;
+window.onunload = function(){
+    socket.disconnect();
+};
 window.onload = function(){
     var socket = io.connect();
-    var field = document.getElementById('field') ;
-    var form = document.getElementById('form') ;
-    var chatWindow = document.getElementById('chat-window') ;
-    var users = document.getElementById('users') ;
+    var field = document.getElementById('field');
+    var form = document.getElementById('form');
+    var chatWindow = document.getElementById('chat-window');
+    var users = document.getElementById('users');
     var name = prompt('Ваше имя?');
-
-    window.onunload = function(){
-        socket.emit('disconnect', {'name': name});
-    };
 
     socket.emit('hello', {'name': name});
 
