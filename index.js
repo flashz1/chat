@@ -1,7 +1,7 @@
 var express = require('express');
 var app = express();
 var io = require('socket.io').listen(app.listen(8080));
-var users = { };
+var users = [];
 
 
 app.use("/css", express.static(__dirname + '/css'));
@@ -13,12 +13,13 @@ app.get('/', function(req,res){
     res.render('tpl/page');
 });
 
-function showUsersList(obj){
+function showUsersList(users){
     var tmp = [];
-    Object.keys(obj).forEach(function(entry) {
-        tmp.push(obj[entry]);
+    return users.map(function(user){
+        var name = user.name;
+        tmp.push(name);
+        return tmp.join(', ');
     });
-    return tmp.join(', ');
 }
 
 io.on('connection', function(client){
@@ -38,6 +39,7 @@ io.on('connection', function(client){
         }else{
             client.emit('message', {message: 'Кроме Вас никого нет'});
         }
-        users[client.id] = data.name;
+        var user = {id: client.id, name: data.name};
+        users.push(user);
     });
 });

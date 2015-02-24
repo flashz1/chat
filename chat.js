@@ -6,6 +6,10 @@ window.onload = function(){
     var users = document.getElementById('users') ;
     var name = prompt('Ваше имя?');
 
+    window.onunload = function(){
+        socket.emit('disconnect', {'name': name});
+    };
+
     socket.emit('hello', {'name': name});
 
     form.onsubmit = function(){
@@ -28,8 +32,4 @@ window.onload = function(){
             console.log('Something wrong');
         }
     });
-
-    //socket.on('showUsers', function(data){
-    //    socket.emit('renderUsers', data);
-    //});
 };
