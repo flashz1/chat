@@ -23,8 +23,9 @@ window.onload = function(){
 
     socket.on('message', function(data){
         if(data.message){
+            var username = data.user ? data.user + ': ' : '';
             var html = '';
-                html+= data.user + ': ' + data.message + '<br>';
+                html+= username + data.message + '<br>';
             chatWindow.innerHTML += html;
         }else{
             console.log('Something wrong');
