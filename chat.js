@@ -9,7 +9,7 @@ window.onload = function(){
     var chatWindow = document.getElementById('chat-window');
     var usersList = document.getElementById('user-list');
     var name = prompt('Ваше имя?');
-    var messages = [];
+    var welcomeMessages = [];
     var user = [];
 
     socket.emit('hello', {'name': name});
@@ -17,15 +17,26 @@ window.onload = function(){
     form.onsubmit = function(){
         var text = field.value;
         socket.emit('send', {'message': text});
+        field.value = '';
         return false;
     };
 
     socket.on('message', function(data){
         if(data.message){
-            messages.push(data.message);
             var html = '';
-            for(var i=0; i<messages.length; i++){
-                html+= messages[i] + '<br>';
+                html+= data.user + ': ' + data.message + '<br>';
+            chatWindow.innerHTML += html;
+        }else{
+            console.log('Something wrong');
+        }
+    });
+
+    socket.on('welcome', function(data){
+        if(data.message){
+            welcomeMessages.push(data.message);
+            var html = '';
+            for(var i=0; i<welcomeMessages.length; i++){
+                html+= welcomeMessages[i] + '<br>';
             }
             chatWindow.innerHTML = html;
         }else{

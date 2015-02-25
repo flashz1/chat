@@ -14,19 +14,20 @@ app.get('/', function(req,res){
 
 io.on('connection', function(client){
     var user = {};
-    client.emit('message', {message: 'Welcome to chat!'});
+    client.emit('welcome', {message: 'Welcome to chat!'});
 
     client.on('send', function(data){
-        io.emit('message', {message: data.message });
+        io.emit('message', {message: data.message, user: user.name });
     });
 
     client.on('hello', function(data){
-        client.emit('message', {message: '--- Welcome ' + data.name + ' ---'});
-        client.broadcast.emit('message', {message: '---' + data.name + ' in chat now! --- ' });
+        client.emit('welcome', {message: '--- Welcome ' + data.name + ' ---'});
+        client.broadcast.emit('welcome', {message: '---' + data.name + ' in chat now! --- ' });
 
         user.id = client.id;
         user.name = data.name;
         users.push(user);
+        client.broadcast.emit('newuser', users);
         client.emit('newuser', users);
     });
 
