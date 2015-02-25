@@ -1,6 +1,7 @@
 var express = require('express');
 var app = express();
 var io = require('socket.io').listen(app.listen(8080));
+var users = [];
 
 app.use("/css", express.static(__dirname + '/css'));
 app.use("/", express.static(__dirname));
@@ -25,11 +26,14 @@ io.on('connection', function(client){
 
         user.id = client.id;
         user.name = data.name;
+        users.push(user);
+        client.emit('newuser', users);
     });
 
-    client.emit('newuser', user);
-
     client.on('disconnect', function() {
-        client.broadcast.emit('removeuser', user);
+        var index = users.indexOf(user);
+        users.splice(index,1);
+        client.broadcast.emit('message', {message: '... ' + user.name + ' has left the chat ...' });
+        client.broadcast.emit('removeuser', users);
     });
 });

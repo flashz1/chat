@@ -10,7 +10,7 @@ window.onload = function(){
     var usersList = document.getElementById('user-list');
     var name = prompt('Ваше имя?');
     var messages = [];
-    var users = [];
+    var user = [];
 
     socket.emit('hello', {'name': name});
 
@@ -34,15 +34,10 @@ window.onload = function(){
     });
 
     socket.on('newuser', function(data){
-        console.log(data);
-        users.push(data);
-        rebuildUserList(users);
+        rebuildUserList(data);
     });
 
-    socket.on('removeuser', function(user){
-        var index = users.indexOf(user);
-        users.splice(index,1);
-        socket.emit('message', {message: '... ' + user.name + ' has left the chat ...' });
+    socket.on('removeuser', function(users){
         rebuildUserList(users);
     });
 
