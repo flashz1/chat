@@ -7,8 +7,10 @@ window.onload = function(){
     var field = document.getElementById('field');
     var form = document.getElementById('form');
     var chatWindow = document.getElementById('chat-window');
-    var users = document.getElementById('users');
+    var usersList = document.getElementById('user-list');
     var name = prompt('Ваше имя?');
+    var messages = [];
+    var users = [];
 
     socket.emit('hello', {'name': name});
 
@@ -17,8 +19,6 @@ window.onload = function(){
         socket.emit('send', {'message': text});
         return false;
     };
-
-    var messages = [];
 
     socket.on('message', function(data){
         if(data.message){
@@ -32,4 +32,25 @@ window.onload = function(){
             console.log('Something wrong');
         }
     });
+
+    socket.on('newuser', function(data){
+        console.log(data);
+        users.push(data);
+        rebuildUserList(users);
+    });
+
+    socket.on('removeuser', function(user){
+        var index = users.indexOf(user);
+        users.splice(index,1);
+        socket.emit('message', {message: '... ' + user.name + ' has left the chat ...' });
+        rebuildUserList(users);
+    });
+
+    function rebuildUserList(users){
+        var html = '';
+        for(var i=0; i<users.length; i++){
+            html+= '<li>' + users[i].name + '</li>';
+        }
+        usersList.innerHTML = html;
+    }
 };
