@@ -14,15 +14,14 @@ app.get('/', function(req,res){
 
 io.on('connection', function(client){
     var user = {};
-    client.emit('welcome', {message: 'Welcome to chat!'});
 
     client.on('send', function(data){
         io.emit('message', {message: data.message, user: user.name });
     });
 
     client.on('hello', function(data){
-        client.emit('welcome', {message: '--- Welcome ' + data.name + ' ---'});
-        client.broadcast.emit('welcome', {message: '---' + data.name + ' in chat now! --- ' });
+        client.emit('message', {welcome: '<i>--- ' + data.name + ', welcome to chat! ---</i>'});
+        client.broadcast.emit('message', {welcome: '<i>--- ' + data.name + ' in chat now! ---</i>' });
 
         user.id = client.id;
         user.name = data.name;
@@ -34,7 +33,7 @@ io.on('connection', function(client){
     client.on('disconnect', function() {
         var index = users.indexOf(user);
         users.splice(index,1);
-        client.broadcast.emit('message', {message: '... ' + user.name + ' has left the chat ...' });
+        client.broadcast.emit('message', {welcome: '<i>... ' + user.name + ' has left the chat ...</i>' });
         client.broadcast.emit('removeuser', users);
     });
 });

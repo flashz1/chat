@@ -1,2 +1,11 @@
 /* custom styles */
 #chat-window { width: 500px; height: 300px; margin: 0 0 20px 0; border: solid 1px #999; overflow-y: scroll; }
+
+#user-list li { padding: 2px 2px 2px 5px; list-style-type: none; }
+#user-list li:nth-child(odd) { background: #f3f3f3; }
+
+.colors-list { padding: 0; margin: 0; }
+.colors-list li { display: inline-block; width: 20px; height: 20px; margin-right: 5px; list-style-type: none;
+    border: 2px dashed #000000; cursor: pointer; }
+
+input[type=radio] { cursor: pointer; }

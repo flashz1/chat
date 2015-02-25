@@ -9,8 +9,10 @@ window.onload = function(){
     var chatWindow = document.getElementById('chat-window');
     var usersList = document.getElementById('user-list');
     var name = prompt('Ваше имя?');
-    var welcomeMessages = [];
     var user = [];
+    var colors = {
+        c : '#ff0000'
+    };
 
     socket.emit('hello', {'name': name});
 
@@ -22,31 +24,21 @@ window.onload = function(){
     };
 
     socket.on('message', function(data){
+        chatWindow.scrollTop = chatWindow.scrollHeight;
+        var html = '';
         if(data.message){
-            var username = data.user ? data.user + ': ' : '';
-            var html = '';
-                html+= username + data.message + '<br>';
+            html+= '<strong>' + startTime() + ': ' + data.user + ':</strong>  ' + '<span style="color:'+ colors.c +'">' + data.message + '</span><br>';
+            chatWindow.innerHTML += html;
+        }else if(data.welcome){
+            html+= data.welcome + '<br>';
             chatWindow.innerHTML += html;
         }else{
             console.log('Something wrong');
         }
     });
 
-    socket.on('welcome', function(data){
-        if(data.message){
-            welcomeMessages.push(data.message);
-            var html = '';
-            for(var i=0; i<welcomeMessages.length; i++){
-                html+= welcomeMessages[i] + '<br>';
-            }
-            chatWindow.innerHTML = html;
-        }else{
-            console.log('Something wrong');
-        }
-    });
-
-    socket.on('newuser', function(data){
-        rebuildUserList(data);
+    socket.on('newuser', function(users){
+        rebuildUserList(users);
     });
 
     socket.on('removeuser', function(users){
@@ -60,4 +52,22 @@ window.onload = function(){
         }
         usersList.innerHTML = html;
     }
+
+    function startTime() {
+        var today = new Date();
+        var h = today.getHours();
+        var m = today.getMinutes();
+        var s = today.getSeconds();
+
+        function checkTime(i) {
+            if (i < 10) {
+                i = "0" + i;
+            }
+            return i;
+        }
+        m = checkTime(m);
+        s = checkTime(s);
+        return h + ":" + m + ":" + s;
+    }
+
 };
