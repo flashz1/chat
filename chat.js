@@ -17,7 +17,7 @@ window.onload = function(){
     form.onsubmit = function(){
         var text = field.value;
         checkColor(radios);
-        socket.emit('send', { message: text, color: colorMsg, time: startTime() });
+        socket.emit('send', { message: text, color: colorMsg });
         field.value = '';
         return false;
     };
@@ -59,23 +59,6 @@ window.onload = function(){
             html+= '<li>' + users[i].name + '</li>';
         }
         usersList.innerHTML = html;
-    }
-
-    function startTime() {
-        var today = new Date();
-        var h = today.getHours();
-        var m = today.getMinutes();
-        var s = today.getSeconds();
-
-        function checkTime(i) {
-            if (i < 10) {
-                i = "0" + i;
-            }
-            return i;
-        }
-        m = checkTime(m);
-        s = checkTime(s);
-        return h + ":" + m + ":" + s;
     }
 
     function checkColor(radios){

@@ -17,11 +17,11 @@ io.on('connection', function(client){
     var user = {};
 
     client.on('send', function(data){
-        messages.push('<strong>' + data.time + ': ' + user.name + ':</strong>  ' + '<span style="color:'+ data.color +'">' + data.message + '</span>');
+        messages.push('<strong>' + startTime() + ': ' + user.name + ':</strong>  ' + '<span style="color:'+ data.color +'">' + data.message + '</span>');
         setTimeout(function(){
             messages.shift();
         }, 30000);
-        io.emit('message', {message: data.message, user: user.name, color: data.color, time: data.time });
+        io.emit('message', {message: data.message, user: user.name, color: data.color, time: startTime() });
     });
 
     client.on('hello', function(data){
@@ -43,4 +43,21 @@ io.on('connection', function(client){
         client.broadcast.emit('message', {welcome: '<i>... ' + user.name + ' has left the chat ...</i>' });
         client.broadcast.emit('removeuser', users);
     });
+
+    function startTime() {
+        var today = new Date();
+        var h = today.getHours();
+        var m = today.getMinutes();
+        var s = today.getSeconds();
+
+        function checkTime(i) {
+            if (i < 10) {
+                i = "0" + i;
+            }
+            return i;
+        }
+        m = checkTime(m);
+        s = checkTime(s);
+        return h + ":" + m + ":" + s;
+    }
 });
