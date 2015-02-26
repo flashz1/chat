@@ -2,6 +2,7 @@ var express = require('express');
 var app = express();
 var io = require('socket.io').listen(app.listen(8080));
 var users = [];
+var messages = [];
 
 app.use("/css", express.static(__dirname + '/css'));
 app.use("/", express.static(__dirname));
@@ -16,7 +17,11 @@ io.on('connection', function(client){
     var user = {};
 
     client.on('send', function(data){
-        io.emit('message', {message: data.message, user: user.name, c: data.c });
+        messages.push('<strong>' + data.time + ': ' + user.name + ':</strong>  ' + '<span style="color:'+ data.color +'">' + data.message + '</span>');
+        setTimeout(function(){
+            messages.shift();
+        }, 30000);
+        io.emit('message', {message: data.message, user: user.name, color: data.color, time: data.time });
     });
 
     client.on('hello', function(data){
@@ -25,13 +30,11 @@ io.on('connection', function(client){
 
         user.id = client.id;
         user.name = data.name;
-        user.color = data.c;
+        user.color = data.color;
         users.push(user);
         client.broadcast.emit('newuser', users);
         client.emit('newuser', users);
-
-        console.log(users);
-        console.log('=========================================================================');
+        client.emit('showHistory', messages);
     });
 
     client.on('disconnect', function() {

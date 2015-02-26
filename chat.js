@@ -12,12 +12,12 @@ window.onload = function(){
     var radios = document.getElementsByName('color');
     var colorMsg;
     checkColor(radios);
-    socket.emit('hello', { name: name, c: colorMsg });
+    socket.emit('hello', { name: name, color: colorMsg });
 
     form.onsubmit = function(){
         var text = field.value;
         checkColor(radios);
-        socket.emit('send', { message: text, c: colorMsg });
+        socket.emit('send', { message: text, color: colorMsg, time: startTime() });
         field.value = '';
         return false;
     };
@@ -25,7 +25,7 @@ window.onload = function(){
     socket.on('message', function(data){
         var html = '';
         if(data.message){
-            html+= '<strong>' + startTime() + ': ' + data.user + ':</strong>  ' + '<span style="color:'+ data.c +'">' + data.message + '</span><br>';
+            html+= '<strong>' + data.time + ': ' + data.user + ':</strong>  ' + '<span style="color:'+ data.color +'">' + data.message + '</span><br>';
             chatWindow.innerHTML += html;
             chatWindow.scrollTop = chatWindow.scrollHeight;
         }else if(data.welcome){
@@ -34,6 +34,15 @@ window.onload = function(){
         }else{
             console.log('Something wrong');
         }
+    });
+
+    socket.on('showHistory', function(messages){
+        var html = '';
+        for(var i=0; i<messages.length; i++){
+            html+= messages[i] + '<br>';
+        }
+        chatWindow.innerHTML += html;
+        chatWindow.scrollTop = chatWindow.scrollHeight;
     });
 
     socket.on('newuser', function(users){
