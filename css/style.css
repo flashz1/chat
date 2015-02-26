@@ -4,8 +4,10 @@
 #user-list li { padding: 2px 2px 2px 5px; list-style-type: none; }
 #user-list li:nth-child(odd) { background: #f3f3f3; }
 
-.colors-list { padding: 0; margin: 0; }
-.colors-list li { display: inline-block; width: 20px; height: 20px; margin-right: 5px; list-style-type: none;
-    border: 2px dashed #000000; cursor: pointer; }
-
-input[type=radio] { cursor: pointer; }
+.colors .color { display: inline-block; width: 20px; height: 20px; margin-right: 15px; }
+.colors .color label { display: block; width: 20px; height: 20px; list-style-type: none;
+    outline: 2px dashed #000000; cursor: pointer; }
+.colors .color label[for=red] { background: #ff0000; }
+.colors .color label[for=blue] { background: #0000ff; }
+.colors .color input[type=radio] { position: absolute; left: -9999px; top: -9999px; }
+.colors .color input[type=radio]:checked + label { outline-style: solid; }

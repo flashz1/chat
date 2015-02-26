@@ -11,12 +11,20 @@ window.onload = function(){
     var name = prompt('Ваше имя?');
     var user = [];
     var colors = {
-        c : '#ff0000'
+        c : 1
     };
 
     socket.emit('hello', {'name': name});
 
     form.onsubmit = function(){
+        var radios = document.getElementsByName('color');
+        for (var i = 0, length = radios.length; i < length; i++) {
+            if (radios[i].checked) {
+                var color = radios[i].value;
+                colors.c = color;
+                break;
+            }
+        }
         var text = field.value;
         socket.emit('send', {'message': text});
         field.value = '';
