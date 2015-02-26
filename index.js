@@ -16,7 +16,7 @@ io.on('connection', function(client){
     var user = {};
 
     client.on('send', function(data){
-        io.emit('message', {message: data.message, user: user.name });
+        io.emit('message', {message: data.message, user: user.name, c: data.c });
     });
 
     client.on('hello', function(data){
@@ -25,9 +25,13 @@ io.on('connection', function(client){
 
         user.id = client.id;
         user.name = data.name;
+        user.color = data.c;
         users.push(user);
         client.broadcast.emit('newuser', users);
         client.emit('newuser', users);
+
+        console.log(users);
+        console.log('=========================================================================');
     });
 
     client.on('disconnect', function() {

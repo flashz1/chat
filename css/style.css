@@ -9,5 +9,6 @@
     outline: 2px dashed #000000; cursor: pointer; }
 .colors .color label[for=red] { background: #ff0000; }
 .colors .color label[for=blue] { background: #0000ff; }
+.colors .color label[for=black] { background: #000000; }
 .colors .color input[type=radio] { position: absolute; left: -9999px; top: -9999px; }
 .colors .color input[type=radio]:checked + label { outline-style: solid; }

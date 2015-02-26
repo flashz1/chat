@@ -9,34 +9,25 @@ window.onload = function(){
     var chatWindow = document.getElementById('chat-window');
     var usersList = document.getElementById('user-list');
     var name = prompt('Ваше имя?');
-    var user = [];
-    var colors = {
-        c : 1
-    };
-
-    socket.emit('hello', {'name': name});
+    var radios = document.getElementsByName('color');
+    var colorMsg;
+    checkColor(radios);
+    socket.emit('hello', { name: name, c: colorMsg });
 
     form.onsubmit = function(){
-        var radios = document.getElementsByName('color');
-        for (var i = 0, length = radios.length; i < length; i++) {
-            if (radios[i].checked) {
-                var color = radios[i].value;
-                colors.c = color;
-                break;
-            }
-        }
         var text = field.value;
-        socket.emit('send', {'message': text});
+        checkColor(radios);
+        socket.emit('send', { message: text, c: colorMsg });
         field.value = '';
         return false;
     };
 
     socket.on('message', function(data){
-        chatWindow.scrollTop = chatWindow.scrollHeight;
         var html = '';
         if(data.message){
-            html+= '<strong>' + startTime() + ': ' + data.user + ':</strong>  ' + '<span style="color:'+ colors.c +'">' + data.message + '</span><br>';
+            html+= '<strong>' + startTime() + ': ' + data.user + ':</strong>  ' + '<span style="color:'+ data.c +'">' + data.message + '</span><br>';
             chatWindow.innerHTML += html;
+            chatWindow.scrollTop = chatWindow.scrollHeight;
         }else if(data.welcome){
             html+= data.welcome + '<br>';
             chatWindow.innerHTML += html;
@@ -76,6 +67,15 @@ window.onload = function(){
         m = checkTime(m);
         s = checkTime(s);
         return h + ":" + m + ":" + s;
+    }
+
+    function checkColor(radios){
+        for (var i = 0, length = radios.length; i < length; i++) {
+            if (radios[i].checked) {
+                colorMsg = radios[i].value;
+                break;
+            }
+        }
     }
 
 };
