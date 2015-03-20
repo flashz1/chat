@@ -25,8 +25,8 @@ io.on('connection', function(client){
     });
 
     client.on('hello', function(data){
-        client.emit('message', {welcome: '<i>--- ' + data.name + ', welcome to chat! ---</i>'});
-        client.broadcast.emit('message', {welcome: '<i>--- ' + data.name + ' in chat now! ---</i>' });
+        client.emit('message', {welcome: '<i>--- ' + data.name + ', Bem-Vindo ao Chat! ---</i>'});
+        client.broadcast.emit('message', {welcome: '<i>--- ' + data.name + ' entrou na conversa! ---</i>' });
 
         user.id = client.id;
         user.name = data.name;
@@ -40,7 +40,7 @@ io.on('connection', function(client){
     client.on('disconnect', function() {
         var index = users.indexOf(user);
         users.splice(index,1);
-        client.broadcast.emit('message', {welcome: '<i>... ' + user.name + ' has left the chat ...</i>' });
+        client.broadcast.emit('message', {welcome: '<i>... ' + user.name + ' saiu da conversa...</i>' });
         client.broadcast.emit('removeuser', users);
     });
 

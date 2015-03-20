@@ -8,7 +8,7 @@ window.onload = function(){
     var form = document.getElementById('form');
     var chatWindow = document.getElementById('chat-window');
     var usersList = document.getElementById('user-list');
-    var name = prompt('Ваше имя?');
+    var name = prompt('Qual é o seu nome?');
     var radios = document.getElementsByName('color');
     var colorMsg;
     checkColor(radios);
@@ -25,7 +25,7 @@ window.onload = function(){
     socket.on('message', function(data){
         var html = '';
         if(data.message){
-            html+= '<strong>' + data.time + ': ' + data.user + ':</strong>  ' + '<span style="color:'+ data.color +'">' + data.message + '</span><br>';
+            html+= '<strong>' + data.time + ': ' + data.user + ' diz:</strong>  ' + '<span style="color:'+ data.color +'">' + data.message + '</span><br>';
             chatWindow.innerHTML += html;
             chatWindow.scrollTop = chatWindow.scrollHeight;
         }else if(data.welcome){
